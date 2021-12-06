@@ -27,7 +27,32 @@
             $srcimg=imagecreatefrombmp('img/'.$_FILES['img']['name']);
          break;
      }
-     $dstimg=imagecreatetruecolor(240,180);
+
+     $info=getimagesize('img/'.$_FILES['img']['name']);
+     $scaleRate=$_POST['rate']; //縮放比例 (負值/小數為縮小，正值/正數為放大)
+     
+     //目標檔案大小
+     $dwidth=$info[0]*$scaleRate; 
+     $dheight=$info[1]*$scaleRate; 
+     
+     //設定邊框大小
+     $border=ceil(($dwidth*0.1)/2); 
+     if(isset($_POST['border'])){
+        $border=ceil(($dwidth*0.1)/2);
+        
+    }else{
+        $border=0;
+
+     }
+
+     
+     //內嵌圖片大小
+     $inner_w=$dwidth-($border*2);
+     $inner_h=$dheight-($border*2);
+     
+     
+
+     $dstimg=imagecreatetruecolor($dwidth,$dheight);
     //   imagecopyresampled($dstimg,$srcimg,0,0,0,0,240,180,573,956);
     //   $fileName='img/'.explode(".",$_FILES['img']['name'])[0]."_small.png";
     //   imagepng($dstimg,$fileName);
@@ -36,8 +61,8 @@
      $white=imagecolorallocate($dstimg,255,255,255);
      imagefill($dstimg,0,0,$white);
 
-     //讓圖片縮小並多了黑色邊界
-     imagecopyresampled($dstimg,$srcimg,20,23,0,0,95,57,956,573);
+     //讓圖片縮小並多了黑色邊界(如果有定義顏色就會顯現定義顏色當邊框)
+     imagecopyresampled($dstimg,$srcimg,$border,$border,0,0,$inner_w,$inner_h,$info[0],$info[1]);
      $fileName='img/'.explode(".",$_FILES['img']['name'])[0]."_small.png";
      imagepng($dstimg,$fileName);
 
@@ -59,6 +84,12 @@
 <!---建立檔案上傳機制--->
 
 <form action="?" method="post" enctype="multipart/form-data">
+    <input type="checkbox" name="border" value="1">是否有邊框<br>
+    <select name="rate">
+        <option value="0.25">縮小四分之一</option>
+        <option value="0.5">縮小一半</option>
+        <option value="2">放大兩倍</option>
+    </select>
     <p><input type="file" name="img"></p>
     <p><input type="submit" value="上傳"></p>
 </form>
