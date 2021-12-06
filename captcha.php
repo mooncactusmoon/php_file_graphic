@@ -27,25 +27,39 @@ for($i=0;$i<$len;$i++){
 $str="";
 $length=rand(4,8);
  for($i=0;$i<$length;$i++){
-     $type=rand(1,3);
-    //  echo "type=>".$type."<br>";
-    switch($type){
-        case 1:
-            //大寫英文 ASCII
-            $str=chr(rand(65,90));
-        break;
-            
-        case 2:
-            //小寫英文 ASCII
-            $str=chr(rand(97,122));
-        break;
-        
-        case 3:
-            //數字 ASCII
-            $str=chr(rand(48,57));
-        break;
-        }
-        echo $str;
+ $type=rand(1,3);
+ //echo "type=>".$type."<br>";
+ switch($type){
+    case 1:
+    //大寫英文 ASCII
+    $str.=chr(rand(65,90));
+    break;
+    case 2:
+    //小寫寫英文 ASCII
+    $str.=chr(rand(97,122));
+    break;
+    case 3:
+    //數字 ASCII
+    $str.=chr(rand(48,57));
+    break;
+ }
 }
+ echo $str;
+    //開始製作圖檔
+    $dstimg=imagecreatetruecolor(200,50);
+    $color=imagecolorallocate($dstimg,100,200,100);
+    $black=imagecolorallocate($dstimg,0,0,0);
+    imagefill($dstimg,0,0,$color);
 
+    //imagestring($dstimg,5,10,10,$str,$black);讓圖片的字整齊排列
+
+    for($i=0;$i<$length;$i++){
+        //此迴圈讓圖片內的字呈現不對齊排列
+        $c=mb_substr($str,$i,1);
+        imagestring($dstimg,5,(10+$i*rand(15,20)),(10+rand(0,10)),$c,$black);
+
+    }
+
+    imagepng($dstimg,'captcha.png');
 ?>
+<img src="captcha.png" alt="">
