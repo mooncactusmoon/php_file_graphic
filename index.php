@@ -12,5 +12,6 @@
 <a href="manage.php"><div class="types">檔案管理</div></a>
 <a href="text-import.php"><div class="types">文字檔案處理</div></a>
 <a href="image.php"><div class="types">圖形處理</div></a>
+<a href="captcha.php"><div class="types">驗證碼產生器</div></a>
 </body>
 </html>
