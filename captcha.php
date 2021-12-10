@@ -46,20 +46,36 @@ $length=rand(4,8);
 }
  echo $str;
     //開始製作圖檔
-    $dstimg=imagecreatetruecolor(200,50);
+    
+    
+    
+    //裡面的路徑要絕對路徑(從cd槽開始)不能填入相對路徑。
+    $fontBox=imagettfbbox(30,0,'E:/phpweb/php_file_and_graphic/font/arial.ttf',$str);
+    
+    //
+    $padding=10;
+    $tw=$padding+($fontBox[2]-$fontBox[0]);
+    $th=$padding+($fontBox[1]-$fontBox[7]);
+    $x=$tw;
+    $y=$th;
+    $yz=$y+$th;
+    $start_x=$padding/2;
+    $start_y=$padding/2+($fontBox[1]-$fontBox[7]);
+    
+
+    $dstimg=imagecreatetruecolor($tw,$th);
     $color=imagecolorallocate($dstimg,100,200,100);
     $black=imagecolorallocate($dstimg,0,0,0);
     imagefill($dstimg,0,0,$color);
 
-    //imagestring($dstimg,5,10,10,$str,$black);讓圖片的字整齊排列
+    imagettftext($dstimg,30,0,$start_x,$start_y,$black,'E:/phpweb/php_file_and_graphic/font/arial.ttf',$str);
+    echo "<pre>";
+    print_r($fontBox);
+    echo "</pre>";
 
-    for($i=0;$i<$length;$i++){
-        //此迴圈讓圖片內的字呈現不對齊排列
-        $c=mb_substr($str,$i,1);
-        imagestring($dstimg,5,(10+$i*rand(15,20)),(10+rand(0,10)),$c,$black);
+    
 
-    }
 
     imagepng($dstimg,'captcha.png');
 ?>
-<img src="captcha.png" alt="">
+<img src="captcha.png" alt="" >
