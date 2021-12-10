@@ -54,24 +54,30 @@ $length=rand(4,8);
     
     //
     $padding=10;
-    $tw=$padding+($fontBox[2]-$fontBox[0]);
-    $th=$padding+($fontBox[1]-$fontBox[7]);
-    $x=$tw;
-    $y=$th;
-    $yz=$y+$th;
-    $start_x=$padding/2;
-    $start_y=$padding/2+($fontBox[1]-$fontBox[7]);
+    $x_array=[$fontBox[0],$fontBox[2],$fontBox[4],$fontBox[6]];
+    $y_array=[$fontBox[1],$fontBox[3],$fontBox[5],$fontBox[7]];
+    $fw=(max($x_array)-min($x_array));
+    $fh=(max($y_array)-min($y_array));
+    $w=$fw+$padding;
+    $h=$fh+$padding;
+
+    $dstimg=imagecreatetruecolor($w,$h);
+   
     
 
-    $dstimg=imagecreatetruecolor($tw,$th);
+    
     $color=imagecolorallocate($dstimg,100,200,100);
     $black=imagecolorallocate($dstimg,0,0,0);
     imagefill($dstimg,0,0,$color);
 
-    imagettftext($dstimg,30,0,$start_x,$start_y,$black,'E:/phpweb/php_file_and_graphic/font/arial.ttf',$str);
-    echo "<pre>";
-    print_r($fontBox);
-    echo "</pre>";
+    $start_x=$padding/2+(0-min($x_array));
+    $start_y=($padding/2)+$fh-max($y_array);
+
+    //realpath()，可以自動轉裡面路徑為絕對路徑 => 'E:/phpweb/php_file_and_graphic/font/arial.ttf'
+    imagettftext($dstimg,30,0,$start_x,$start_y,$black,realpath('./font/arial.ttf'),$str);
+    // echo "<pre>";
+    // print_r($fontBox);
+    // echo "</pre>";
 
     
 
